@@ -1,0 +1,486 @@
+import re
+
+
+def message_probability(user_message, recognised_words, single_response=False, required_words=[]):
+    message_certainty = 0
+    has_required_words = True
+
+    # Counts how many words are present in each predefined message
+    for word in user_message:
+        if word in recognised_words:
+            message_certainty += 1
+
+    # Calculates the percent of recognised words in a user message
+    percentage = float(message_certainty) / float(len(recognised_words))
+
+    # Checks that the required words are in the string
+    for word in required_words:
+        if word not in user_message:
+            has_required_words = False
+            break
+
+    # Must either have the required words, or be a single response
+    if has_required_words or single_response:
+        return int(percentage * 100)
+    else:
+        return 0
+
+
+def check_all_messages(message):
+    highest_prob_list = {}
+
+    # Simplifies response creation / adds it to the dict
+    def response(bot_response, list_of_words, single_response=False, required_words=[]):
+        nonlocal highest_prob_list
+        highest_prob_list[bot_response] = message_probability(message, list_of_words, single_response, required_words)
+
+    # Responses -------------------------------------------------------------------------------------------------------
+    response('Hello!', ['hello', 'hi', 'hey', 'sup', 'heyo'], single_response=True)
+    response('You\'re welcome!', ['thank', 'thanks'], single_response=True)
+    response('See you!', ['bye', 'goodbye'], single_response=True)
+    response('//......Types of programming languages......// \n'
+             '1) Python. \n'
+             '2) javaScript. \n'
+             '3)C / C++. \n'
+             '4)C#. \n'
+             '5)PHP. \n'
+             '6)Java. \n'
+             '7)HTML. \n'
+             '8)CSS. \n'
+             '9)Ruby. \n'
+             'There are hundreds of programming languages in existence. \n'
+             'Developers will first consider the needs of the application so they can decide \n'
+             'Which languages would be appropriate to use.Here are a few popular programming languages.\n'
+             'Some of these languages are primarily used in one field of development \n'
+             'While others are more general purpose programming languages. \n'
+             'JavaScript is primarily used in web development and is usually the \n'
+             'First programming language learned by beginner web developers. \n'
+             'JavaScript can also be used for mobile and game development. \n'
+             'Python can be used in a variety of areas like data analysis, \n'
+             'Machine learning, and web development. \n'
+             'Programming languages are  grouped in a variety of categories. \n'
+             'Here is a list of some of the categories. \n', ['what', 'is', 'Type', 'of', 'programming', 'languages'],
+             single_response=True)
+    response('//......Types of programming jobs......// \n'
+             '1) Web developer. \n'
+             '2) Mobile developer. \n'
+             '3) Game Development. \n'
+             '4) Computer programmers. \n'
+             '5) Front-End Developer. \n'
+             '6) Back-End Developer. \n'
+             '7) Full-Stack Developer. \n'
+             '8) Software Application Developer. \n'
+             '9) Computer Systems Analyst. \n'
+             '10) Computer Systems Engineer. \n'
+             '11) Network Systems Administrator. \n'
+             '12) Database Administrator. \n'
+             '13) Software quality assurance (QA) engineer. \n',
+             ['type', 'of', 'programming', 'jobs'], single_response=True)
+    response('Web development. \n'
+             'use computer programming to create and maintain websites. \n'
+             'Professionals with this coding job typically spend their time testing, \n'
+             'new applications and components of websites, writing code, \n'
+             'and working with a client or team to identify the scope and requirements for the website. \n'
+             'Web developers may specialize in front-end or back-end development, \n'
+             'or they may work on both as a full-stack developer \n'
+             'Median Annual Salary: $77,200 (as of May 2020, according to the BLS) \n'
+             'Common Education Requirements: Associate degree, coding bootcamp, or certification. \n'
+             'According to the BLS, coding jobs for web developers are projected \n'
+             'to grow 13% between 2020 and 2030, which is faster than \n'
+             'the 8% projected growth rate across all occupations. \n'
+             'Those entering the tech field may be able to find an entry-level coding job \n'
+             'as a web developer. This role is also very remote-friendly. \n'
+             'Common Programming Languages for Web Developers: \n'
+             '1) HTML, \n'
+             '2) CSS, \n'
+             '3) JavaScript, \n'
+             '4) PHP, \n'
+             '5) Python, and more. \n'
+             'There are plenty of courses that you can take online to teach yourself. \n'
+             'You can also go through a bootcamp which entails months of intensive study. \n'
+             'Salaries will differ between locations but they tend to be high paying jobs. \n'
+             'If you want to learn more about web development or you want to learn look for these options.... \n'
+             'What is Web Development? \n'
+             'How to Become a Web Developer?. \n'
+             'Front End Developer – What is Front End Development?, Explained in Plain English. \n'
+             'What is a Full Stack Developer? Back End + Front End = Full Stack Engineer. \n'
+             'Coding Programs – 152 Coding Classes You can Take for Free Online. \n'
+             'If you want good courses on Web Development, go to Udemy. \n'
+             'You can go through this link to the site. \n'
+             'https://www.udemy.com/ \n'
+             'In English: \n'
+             '//.....HTML Tutorial for Beginners: HTML Crash Course.....// \n'
+             'https://www.youtube.com/watch?v=qz0aGYrrlhU \n'
+             '//.....JavaScript Tutorial for Beginners: Learn JavaScript in 1 Hour.....// \n'
+             'https://www.youtube.com/watch?v=W6NZfCO5SIk \n'
+             'In Arabic: \n'
+             'HTML و CSS تعلم خطوة بخطوة بطريقة سهلة ومبسطة - دورة كاملة \n' 
+             'https://www.youtube.com/watch?v=c9559JVpFV4 \n',
+             ['what', 'is', 'web', 'development'], single_response=True)
+    response('Mobile developer. \n'
+             'These types of developers build applications for mobile devices. \n'
+             'Programming languages will include. \n'
+             '1) React Native. \n'
+             '2) Swift. \n'
+             '3) Flutter. \n'
+             '4) Java. \n'
+             '5) Kotlin. \n'
+             'If you want to learn more about Mobile developer or you want to learn look for these options.... \n'
+             'What Is Mobile App Development? \n'
+             'Getting Started with Android Development. \n'
+             'Coding Programs – 152 Coding Classes You can Take for Free Online. \n'
+             'If you want good courses on Mobile Developer, go to Udemy. \n'
+             'You can go through this link to the site. \n'
+             'https://www.udemy.com/ \n'
+             '//......Android Development for Beginners - Full Course......// \n'
+             'https://www.youtube.com/watch?v=fis26HvvDII \n'
+             '//......Mobile Application Monitoring......// \n'
+             'https://sentry.io/for/mobile/?utm_source=google&utm_medium=cpc&utm_campaign=9712148604&utm_content=s&utm_term=%2Bmobile%20%2Bapplication%20%2Bdevelopment&device=c&gclid=EAIaIQobChMI_arU5rnS9wIVN4ODBx2F3Q1IEAAYAyAAEgKrFvD_BwE&gclid=EAIaIQobChMI_arU5rnS9wIVN4ODBx2F3Q1IEAAYAyAAEgKrFvD_BwE \n',
+             ['what', 'is', 'mobile', 'developer'], single_response=True)
+    response('Game Development. \n'
+             'These programmers will build custom games for mobile, \n'
+             'desktop and game console use. \n'
+             'Programming languages can include. \n'
+             '1) C++. \n'
+             '2) C#. \n'
+             '3) Lua. \n'
+             '4) Python. \n'
+             'These programmers will work for small independent game studios \n'
+             'as well as larger international companies like Sony. \n'
+             'There are plenty of courses that you can take online to teach yourself. \n'
+             'Salaries will differ between locations but they tend to be high paying jobs. \n'
+             'If you want to learn more about Game Development or you want to learn look for these options.... \n'
+             '//.....Learn Unity - Beginners Game Development Tutorial.....// \n'
+             'https://www.youtube.com/watch?v=gB1F9G0JXOo \n'
+             '//.....Unreal Engine 5 Beginner Tutorial - UE5 Starter Course!.....// \n'
+             'https://www.youtube.com/watch?v=gQmiqmxJMtA \n'
+             '//.....Game development is HARD.....// \n'
+             'https://www.youtube.com/watch?v=WH4ccUV2VCU \n'
+             'If you want good courses on game Development, go to Udemy. \n'
+             'You can go through this link to the site. \n'
+             'https://www.udemy.com/ \n'
+             ,
+             ['what', 'is', 'game', 'development'], single_response=True)
+    response('Computer programmers: \n'
+             'create new software, websites, and other applications, \n'
+             'and they ensure that applications and software run smoothly. \n'
+             'In addition to writing new code, \n'
+             'programmers also test code for errors and spend time updating, \n'
+             'and enhancing already developed programs. \n'
+             'Computer programming is a common entry-level coding job, \n'
+             'and is also often a remote coding job. \n'
+             'Median Annual Salary: $89,190 (as of May 2020, according to the BLS). \n'
+             'Common Education Requirements: Bachelors degree, coding bootcamp, or certification. \n'
+             'While the BLS projects a decline in demand for this occupation between 2020 and 2030, \n'
+             'computer programming job descriptions often overlap \n'
+             'with those of web developers and software developers, \n'
+             'both of which are projected to grow much faster than average in that time period. \n'
+             'Common Programming Languages for Computer Programmers: '
+             '1) Java. \n'
+             '2) Python. \n'
+             '3) C. \n'
+             '4) C++. \n'
+             '5) C#. \n'
+             'If you want good courses, go to the Udemy website. You can go through this link to the site. \n'
+             'https://www.udemy.com/ \n'
+             '//......Introduction to Programming and Computer Science - Full Course.....// \n'
+             'https://www.youtube.com/watch?v=zOjov-2OZ0E \n',
+             ['what', 'is', 'Computer', 'programmers'], single_response=True)
+    response('Front-End Developer: \n'
+             ' focus on building the part of a website that a user sees and interacts with. \n'
+             'These professionals integrate web design principles. \n'
+             'to make sure the website functions smoothly and, \n'
+             'looks good on different devices. They also track website performance, \n'
+             'monitor sites for usability issues, and address errors in the code. \n'
+             'Front-end developers commonly work with back-end developers, \n'
+             'web designers, and user experience designers. \n'
+             'Average Annual Salary: $76,090 (as of December 2021, according to Payscale) \n'
+             'Common Education Requirements: Associate degree, coding bootcamp, or certification. \n'
+             'Common Programming Languages for Front-End Developers: \n'
+             '1) JavaScript. \n'
+             '2) CSS. \n'
+             '3) HTML. \n'
+             'If you want good courses on html, css and javascript, go to Udemy. \n'
+             'You can go through this link to the site. \n'
+             'https://www.udemy.com/ \n'
+             'Front End Full Course | Front End Development Tutorial | Front End Development Course | Simpli learn. \n'
+             'https://www.youtube.com/watch?v=Q8NPQ2RgWyg \n'
+             '//....Frontend Development Course - Create a Blog with HTML & CSS....// \n'
+             'https://www.youtube.com/watch?v=Aj7HLsJenVg . \n',
+             ['what', 'is', 'front-end', 'developer'], single_response=True)
+    response('Back-End Developer: \n'
+             'work on the part of a website that operates behind the scenes. \n'
+             'Professionals with this coding job are, \n'
+             'in charge of site performance and server-side functioning. \n'
+             'In addition to writing code for new websites, \n'
+             'back-end developers also ensure existing sites are able to manage, \n'
+             'store, and retrieve data; grow to scale; and operate at high speeds. \n'
+             'Average Annual Salary: $86,240 (as of December 2021, according to Payscale). \n'
+             'Common Education Requirements: Associate degree, coding bootcamp, or certification. \n'
+             'Common Programming Languages for Back-End Developers: \n'
+             '1) Java. \n'
+             '2) C. \n'
+             '3) C++. \n'
+             '4) Python. \n'
+             'If you want good courses on Back-End Developer, go to Udemy. \n'
+             'You can go through this link to the site. \n'
+             'https://www.udemy.com/ \n',
+             ['what', 'is', 'back-end', 'developer'], single_response=True)
+    response('Full-Stack Developer: \n'
+             'works on both the front end and back end of a website. \n'
+             'Very often, full-stack developers work alongside user experience. \n'
+             'and user interface designers who help design the look, \n'
+             'feel, and functionality of the site. \n'
+             'Median Annual Salary: $77,200 (as of May 2020, according to the BLS). \n'
+             'Common Education Requirements: Associate degree, coding bootcamp, or certification. \n'
+             'Common Programming Languages for Full-Stack Developers: \n'
+             '1) Python. \n'
+             '2) JavaScript. \n'
+             '3) Java. \n'
+             '4) PHP. \n'
+             '5) SQL. \n'
+             '//....Full stack web development and AI with Python (Django)....// \n'
+             'https://www.udemy.com/course/unaicorn/ \n',
+             ['what', 'is', 'full-stack', 'developer'], single_response=True)
+    response('Software Application Developer: \n'
+             'Software developers lead software application creation, \n'
+             'often from start to finish. \n'
+             'Software may include programs built for a specific task, \n'
+             'or those used in operating systems. \n'
+             'Software application developers design, \n'
+             'test, and troubleshoot software to meet the needs of various users. \n'
+             'Jobs for software developers are projected to grow much faster than average, \n'
+             'with a projected increase of 22% between 2020 and 2030, according to the BLS. \n'
+             'Median Annual Salary: $110,140 (as of May 2020, according to the BLS). \n'
+             'Common Education Requirements: Bachelors degree, coding bootcamp, or certification. \n'
+             'Common Programming Languages for Software Application Developers: \n'
+             '1) Python. \n'
+             '2) Java. \n'
+             '3) Ruby. \n'
+             '4) C. \n'
+             'If you want good courses on Software Application Developer, go to Udemy. \n'
+             'You can go through this link to the site. \n'
+             'https://www.udemy.com/ \n',
+             ['what', 'is', 'software', 'application', 'developer'], single_response=True)
+    response('Computer System Analyst: \n'
+             'Computer systems analysts examine computer, \n'
+             'and information technology systems operating at an organization, \n'
+             'and provide recommendations to make them run more smoothly. \n'
+             'They often design solutions for systems issues and inefficiencies, \n'
+             'evaluate new hardware or software for potential introduction into a business, \n'
+             'and set up systems operations. \n'
+             'These tech professionals need a foundation in both business, \n'
+             'and information technology. \n'
+             'The BLS projects that positions for computer systems analysts, \n'
+             'will grow about as fast as average (7%) between 2020 and 2030. \n'
+             'Median Annual Salary: $93,730 (as of May 2020, according to the BLS). \n'
+             'Common Education Requirements: Bachelor is degree. \n'
+             'Common Programming Languages for Computer Systems Analysts: \n '
+             '1) Python. \n'
+             '2) C. \n'
+             '3) Java. \n'
+             '4) SQL. \n'
+             'If you want good courses on Computer System Analyst, go to Udemy. \n'
+             'You can go through this link to the site. \n'
+             'https://www.udemy.com/ \n',
+             ['what', 'is', 'computer system', 'analyst'], single_response=True)
+    response('Computer System Engineer: \n'
+             'work with software developers and other engineers to manage, \n'
+             'update, and improve upon business computer systems. \n'
+             'Professionals with this coding job provide technical support for maintaining an organization \n'
+             'is computer systems and take part in system development. \n'
+             'Average Annual Salary: $80,800 (as of December 2021, according to Payscale). \n'
+             'Common Education Requirements: Bachelor is degree. \n'
+             'Common Programming Languages for Computer Systems Engineers: \n'
+             '1) Java. \n'
+             '2) C. \n'
+             '3) C++. \n'
+             'If you want good courses on Computer System Engineer, go to Udemy. \n'
+             'You can go through this link to the site. \n'
+             'https://www.udemy.com/ \n',
+             ['what', 'is', 'computer system', 'engineer'], single_response=True)
+    response('Network Systems Administrator: \n'
+             'A network systems administrator manages a company is servers, \n'
+             'computer equipment, local networks, and intranet. \n'
+             'These professionals maintain both the hardware \n'
+             'and software used in an organization is computer network \n'
+             'so that the company operates effectively.According to the BLS, \n'
+             'jobs for network and computer systems administrators are projected \n'
+             'to grow 5% between 2020 and 2030, \n'
+             'slightly below the average growth across all occupations. \n'
+             'Median Annual Salary: $84,810 (as of May 2020, according to the BLS). \n'
+             'Common Education Requirements: Bachelor is degree. \n'
+             'Common Programming Languages for Network Systems Administrators: \n'
+             '1) Python. \n'
+             '2) Bash. \n'
+             '3) Powershell. \n'
+             'If you want good courses on Network Systems Administrator, go to Udemy. \n'
+             'You can go through this link to the site. \n'
+             'https://www.udemy.com/ \n',
+             ['what', 'is', 'network', 'system administrator'], single_response=True)
+    response('Database Administrator: \n'
+             'Database administrators determine an organization \n'
+             'is information storage and management needs, \n'
+             'and then build a database to house that information. \n'
+             'Additionally, they merge new and old databases \n'
+             'and ensure current databases run smoothly and securely. \n'
+             'Database administration is projected to \n'
+             'grow by 8% between 2020 and 2030, according to the BLS. \n'
+             'Median Annual Salary: $98,860 (as of May 2020, according to the BLS). \n'
+             'Common Education Requirements: Bachelor is degree. \n'
+             'Common Programming Languages for Database Administrators: \n'
+             '1) SQL. \n'
+             '2) Python. \n'
+             '3) R. \n'
+             '4) PHP. \n'
+             'If you want good courses on Database Administrator, go to Udemy. \n'
+             'You can go through this link to the site. \n'
+             'https://www.udemy.com/ \n',
+             ['what', 'is', 'database', 'Administrator'], single_response=True)
+    response('Software quality assurance (QA) engineer: \n'
+             'Software QA engineers are at the beginning of software, \n'
+             'documenting defects, designing tests and scenarios, \n'
+             'and creating manuals for new software. \n'
+             'They also review software designs for functionality and potential problems. \n'
+             '2019 median salary: $88,5502. \n'
+             'Education requirements: Bachelor’s degree. \n'
+             'Most common programming languages for software QA engineers: \n'
+             '1) Java. \n'
+             '2) Python. \n'
+             '3) JavaScript. \n'
+             'If you want good courses on Software quality assurance (QA) engineer, go to Udemy. \n'
+             'You can go through this link to the site. \n'
+             'https://www.udemy.com/ \n'
+             'If you want to learn more about Software quality assurance (QA) engineer Go to this site: \n'
+             'https://www.rasmussen.edu/degrees/technology/blog/what-does-a-qa-analyst-do/ \n',
+             ['what', 'is', ' Software quality', 'assurance (QA) engineer'], single_response=True)
+    response('A professional programmer will have a variety of responsibilities, \n'
+             'when it comes to building computer programs. \n'
+             'Here are some of the important skills needed in programming. \n'
+             '1) Writing clean and efficient code. \n'
+             '2) Problem solving. \n'
+             '3) Testing applications. \n'
+             '4) Fixing errors ("bugs") in the code. \n'
+             '5) Good communication and listening skills. \n'
+             '6) Ability to work well within a team. \n'
+             '7) Patience and perseverance. \n'
+             'It is the job of a programmer to take the needs of the client and create a solid working application. \n'
+             'Developers will spend a lot of time researching, building, fixing and testing their code. \n'
+             'After the application is released, developers will spend time \n'
+             'maintaining the product and working to make it better. \n',
+             ['what', 'skills', 'should', 'a programming', 'have'], single_response=True)
+    response('Python is a high-level, interpreted, general-purpose programming language. \n'
+             'Its design philosophy emphasizes code readability with the use of significant indentation. \n'
+             'Python is dynamically-typed and garbage-collected. It supports multiple programming paradigms, \n'
+             'including structured (particularly procedural), object-oriented and functional programming. \n'
+             'It is often described as a "batteries included" language due to its comprehensive standard library. \n'
+             'If you want good courses on Python, go to Udemy. \n'
+             'You can go through this link to the site. \n'
+             'https://www.udemy.com/ \n'
+             '//.....Some videos to learn Python.....// \n'
+             'In English: \n'
+             'https://www.youtube.com/c/Freecodecamp \n'
+             'https://www.youtube.com/watch?v=_uQrJ0TkZlc \n'
+             'In Arabic: \n'
+             'https://www.youtube.com/watch?v=nyz2sieUtsI \n'
+             'https://www.youtube.com/watch?v=h3VCQjyaLws&list=PLuXY3ddo_8nzrO74UeZQVZOb5-wIS6krJ',
+             ['tell', 'me', 'about', 'python'], single_response=True)
+    response('1) AI and machine learning. \n'
+             '2) Deep Learning. \n'
+             '3) Data analytics. \n'
+             '4) Data visualisation. \n'
+             '5) Programming applications. \n'
+             '6) Web development. \n'
+             '7) Game development. \n'
+             '8) Language development. \n'
+             '9) Finance. \n',
+             ['where', 'we', 'use', 'python'], single_response=True)
+    response('Artificial intelligence (AI) is intelligence demonstrated by machines, \n'
+             'as opposed to the natural intelligence displayed by animals including humans. \n'
+             'AI research has been defined as the field of study of intelligent agents, \n'
+             'which refers to any system that perceives its environment and takes actions that \n'
+             '\n'
+             '//..Goals..// \n'
+             'The general problem of simulating (or creating) intelligence has been broken down into sub-problems. \n'
+             'These consist of particular traits or capabilities that researchers \n'
+             'expect an intelligent system to display. \n'
+             ' The traits described below have received the most attention. \n'
+             '\n'
+             '//..Reasoning, problem-solving..// \n'
+             'Early researchers developed algorithms that imitated step-by-step reasoning that humans use when they \n'
+             'solve puzzles or make logical deductions. By the late 1980s and 1990s, AI research had developed \n'
+             'methods for dealing with uncertain or incomplete information, employing concepts \n'
+             'from probability and economics. \n'
+             'maximize its chance of achieving its goals. \n'
+             '\n'
+             '//....Some tips on artificial intelligence....// \n'
+             'If you want to study artificial intelligence, \n'
+             'I advise you in Python, because it is the most powerful language in this field, \n'
+             'and there are some courses that I advise you to follow, and you should also learn a library(TensorFlow)\n'
+             'If you want to learn about tensorflow go to its official website and read about it. \n'
+             'https://www.tensorflow.org/ \n'
+             'There are a lot of courses that you can study on Udemy, \n'
+             'I will leave the link to you and you can search for courses if you want. \n'
+             'https://www.udemy.com/ \n'
+             'These are some of the courses from Udemy that I recommend to you. \n'
+             '//....Practical AI with Python and Reinforcement Learning....// \n'
+             'https://www.udemy.com/course/practical-ai-with-python-and-reinforcement-learning/ \n'
+             '//....Master Artificial Intelligence 2022 : Build 6 AI Projects....// \n'
+             'https://www.udemy.com/course/artificial-intelligence-in-python-/ \n'
+             '\n'
+             'There are some courses that you can follow on YouTube. \n'
+             '//..Artificial Intelligence Full Course | Artificial Intelligence Tutorial for Beginners..// \n'
+             'https://www.youtube.com/watch?v=JMUxmLyrhSk \n'
+             '//....AI And Machine Learning Full Course 2022 | AI Tutorial | Machine Learning Tutorial....// \n'
+             'https://www.youtube.com/watch?v=0lmQEo3NIJ4 \n'
+             '//....Artificial Intelligence Course | AI Full Course | Artificial Intelligence Tutorial....// \n'
+             'https://www.youtube.com/watch?v=PXwUEJVSAeA \n'
+             'Some ideas that can be created by artificial intelligence. \n'
+             '//....Artificial Intelligence Project Ideas | Artificial Intelligence Training....// \n'
+             'https://www.youtube.com/watch?v=7V_AebZFlpo \n'
+             '\n'
+             'If you want to learn about the things that can be made by artificial intelligence, \n'
+             'I highly recommend you to follow this man, \n'
+             'who has a huge amount of projects he made he posted it on YouTube, \n'
+             'and he is one of the best explainers of artificial intelligence on YouTube. \n'
+             '//.....Nicholas Renotte....// \n'
+             'https://www.youtube.com/channel/UCHXa4OpASJEwrHrLeIzw7Yg \n',
+             ['what', 'is', 'AI in python'], single_response=True)
+    response('Machine learning (ML), a fundamental concept of AI research since the field, \n'
+             'is inception, is the study of computer algorithms that improve automatically through experience. \n'
+             'Unsupervised learning finds patterns in a stream of input. \n'
+             'Supervised learning requires a human to label the input data first, \n'
+             'comes in two main varieties: classification and numerical regression. \n'
+             'Classification is used to determine what category something belongs in—the program sees, \n'
+             'a number of examples of things from several categories and will learn to classify new inputs. \n'
+             'Regression is the attempt to produce a function that describes the relationship between inputs, \n'
+             'and outputs and predicts how the outputs should change as the inputs change. \n'
+             'Both classifiers and regression learners can be viewed as "function approximators", \n'
+             'trying to learn an unknown (possibly implicit) function; for example, \n'
+             'a spam classifier can be viewed as learning a function that maps from the text of an email to, \n'
+             'one of two categories, "spam" or "not spam". \n'
+             'In reinforcement learning the agent, \n'
+             'is rewarded for good responses and punished for bad ones. \n'
+             'The agent classifies its responses to form a strategy for operating in its problem space. \n'
+             'Transfer learning is when the knowledge gained from one problem is applied to a new problem. \n'
+             '//....Machine Learning Course for Beginners....// \n'
+             'https://www.youtube.com/watch?v=NWONeJKn6kc \n'
+             '//....AI And Machine Learning Full Course 2022 | AI Tutorial | Machine Learning Tutorial....// \n'
+             'https://www.youtube.com/watch?v=0lmQEo3NIJ4 \n',
+             ['what', 'is', 'machine', 'learning'], single_response=True)
+
+    best_match = max(highest_prob_list, key=highest_prob_list.get)
+    return best_match
+
+
+# Used to get the response
+def get_response(user_input):
+    split_message = re.split(r'\s+|[,;?!.-]\s*', user_input.lower())
+    response = check_all_messages(split_message)
+    return response
+
+
+# Testing the response system
+while True:
+    print('Bot: ' + get_response(input('You: ')))
+
